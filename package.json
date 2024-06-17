@@ -1,0 +1,28 @@
+{
+  "name": "demoqa",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cy:open": "npx cypress open",
+    "cy:run": "npx cypress run",
+    "cy:qa": "npx cypress run --env version=qa",
+    "cy:staging": "npx cypress run --env version=staging"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/chance": "^1.1.6",
+    "cypress": "^13.11.0",
+    "cypress-mochawesome-reporter": "^3.8.1"
+  },
+  "dependencies": {
+    "chai-json-schema": "^1.5.1",
+    "chance": "^1.1.11",
+    "dotenv": "^16.4.5",
+    "ts-loader": "latest",
+    "typescript": "latest"
+  }
+}

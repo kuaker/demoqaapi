@@ -1,0 +1,79 @@
+# This is a basic workflow that is manually triggered
+
+name: Run Parallel Cypress Tests
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+    workflow_dispatch:
+        # Inputs the workflow accepts.
+        inputs:
+            name:
+                # Friendly description to be shown in the UI instead of 'name'
+                description: 'Environment to deploy'
+                # Default value if no value is explicitly provided
+                default: 'staging'
+                # Input has to be provided for the workflow to run
+                required: true
+                type: choice
+                options:
+                    - staging
+                    - qa
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    cypress-api-tests:
+        runs-on: ubuntu-20.04
+        strategy:
+            fail-fast: false
+            matrix:
+                node: [22]
+                containers: [1]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            # Install NPM dependencies, cache them correctly
+            # and run all Cypress tests
+
+            - name: 'API TESTS'
+              uses: cypress-io/github-action@v4
+              with:
+                  record: false
+                  browser: chrome
+                  spec: cypress/e2e/tests/api
+                  node-version: ${{ matrix.node }}
+            - name: Uploading artifact
+              uses: actions/upload-artifact@v2
+              if: always()
+              with:
+                  name: cypress-api-report
+                  path: cypress/results
+                  retention-days: 10
+
+    cypress-ui-tests:
+        runs-on: ubuntu-20.04
+        strategy:
+            fail-fast: false
+            matrix:
+                node: [22]
+                containers: [1]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            # Install NPM dependencies, cache them correctly
+            # and run all Cypress tests
+
+            - name: 'UI Tests'
+              uses: cypress-io/github-action@v4
+              with:
+                  record: false
+                  browser: chrome
+                  spec: cypress/e2e/tests/ui
+                  node-version: ${{ matrix.node }}
+            - name: Uploading artifact
+              uses: actions/upload-artifact@v2
+              if: always()
+              with:
+                  name: cypress-ui-tests-report
+                  path: cypress/results
+                  retention-days: 10
