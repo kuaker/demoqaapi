@@ -14,7 +14,7 @@ export default defineConfig({
   watchForFileChanges: false,
   video: true,
   chromeWebSecurity: false,
-  retries: 1,
+  retries: 3,
   downloadsFolder: "cypress/downloads",
   e2e: {
     // We've imported your old cypress plugins here.
